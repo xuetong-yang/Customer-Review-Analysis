@@ -148,11 +148,12 @@ This was a three-person project with Qianyue Li and Qianru Qian.
 - Built the Python pipeline that flattens the XML and loads it into PostgreSQL (`scripts/import_to_postgres.py`, `scripts/add_xpointer.py`)
 - Wrote the SQL analysis and full-text search queries (`queries/sql/`)
 
-**My teammates' part:** the XML conversion, the XPath exploration, the keyword normalization, the Neo4j knowledge graph with its Cypher queries, and the SPARQL extension.
+**My teammates' part:** Qianyue Li built the XML conversion and the Neo4j knowledge graph with its Cypher queries. The XPath exploration, the keyword normalization and the SPARQL extension were done by my teammates.
 Their code is included here, with local paths and credentials removed, so the full pipeline can be followed.
 
 ## Authors
 
+- Xuetong Yang
 - Qianyue Li
 - Qianru Qian
-- Xuetong Yang
+
