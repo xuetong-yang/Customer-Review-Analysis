@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Synthetic example in the project's annotation format.
+  The review texts below are invented for illustration.
+  The real project used 100 reviews from the Yelp Open Dataset, which are not redistributed here.
+-->
+<reviews xmlns="http://tt-project.com/reviews">
+  <review review_id="sample_001" brand="Burger King">
+    <text>The staff were friendly and the order came out fast. The fries were a bit soggy, but the dining room was clean.</text>
+    <annotations>
+      <service>
+        <rating>good</rating>
+        <keyword>friendly</keyword>
+        <keyword>came out fast</keyword>
+      </service>
+      <foodQuality>
+        <rating>bad</rating>
+        <keyword>soggy</keyword>
+      </foodQuality>
+      <environment>
+        <rating>good</rating>
+        <keyword>clean</keyword>
+      </environment>
+      <price>
+        <rating>n/a</rating>
+      </price>
+    </annotations>
+  </review>
+  <review review_id="sample_002" brand="McDonald's">
+    <text>Service was slow. We had to wait almost 20 minutes in the drive-thru and the cashier was rude. At least the meal was cheap.</text>
+    <annotations>
+      <service>
+        <rating>bad</rating>
+        <keyword>wait almost 20 minutes</keyword>
+        <keyword>rude</keyword>
+      </service>
+      <foodQuality>
+        <rating>n/a</rating>
+      </foodQuality>
+      <environment>
+        <rating>n/a</rating>
+      </environment>
+      <price>
+        <rating>good</rating>
+        <keyword>cheap</keyword>
+      </price>
+    </annotations>
+  </review>
+</reviews>

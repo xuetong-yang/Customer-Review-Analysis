@@ -1,0 +1,64 @@
+# Combine the local RDF review graph with public company data from Wikidata.
+# For each brand: share of good / bad / neutral service mentions, plus total assets and net income.
+# Run against review_kg.ttl in a SPARQL 1.1 endpoint with federation (e.g. Apache Jena Fuseki).
+
+PREFIX ex:      <http://example.org/reviews/ontology#>
+PREFIX schema1: <http://schema.org/>
+PREFIX wd:      <http://www.wikidata.org/entity/>
+PREFIX wdt:     <http://www.wikidata.org/prop/direct/>
+PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT
+    ?brandLabel
+    (SAMPLE(?assets)    AS ?totalAssets)
+    (SAMPLE(?netIncome) AS ?totalNetIncome)
+    (COALESCE(?goodPct, 0)    AS ?goodReviewsPct)
+    (COALESCE(?badPct, 0)     AS ?badReviewsPct)
+    (COALESCE(?neutralPct, 0) AS ?neutralReviewsPct)
+WHERE {
+  VALUES ?brandURI { wd:Q177054 wd:Q38076 }   # Burger King, McDonald's
+
+  # --- Local graph: count reviews by sentiment ---
+  {
+    SELECT ?brandURI
+           (COUNT(DISTINCT ?review)        AS ?totalReviews)
+           (COUNT(DISTINCT ?goodReview)    AS ?goodReviews)
+           (COUNT(DISTINCT ?badReview)     AS ?badReviews)
+           (COUNT(DISTINCT ?neutralReview) AS ?neutralReviews)
+    WHERE {
+      ?review rdf:type schema1:Review ;
+              schema1:itemReviewed ?brandURI .
+      OPTIONAL {
+        ?review ex:expressesSentiment ?s1 .
+        ?s1 ex:sentimentType "good" .
+        BIND(?review AS ?goodReview)
+      }
+      OPTIONAL {
+        ?review ex:expressesSentiment ?s2 .
+        ?s2 ex:sentimentType "bad" .
+        BIND(?review AS ?badReview)
+      }
+      OPTIONAL {
+        ?review ex:expressesSentiment ?s3 .
+        ?s3 ex:sentimentType "neutral" .
+        BIND(?review AS ?neutralReview)
+      }
+    }
+    GROUP BY ?brandURI
+  }
+
+  BIND(IF(?totalReviews > 0, ?goodReviews    * 100.0 / ?totalReviews, 0) AS ?goodPct)
+  BIND(IF(?totalReviews > 0, ?badReviews     * 100.0 / ?totalReviews, 0) AS ?badPct)
+  BIND(IF(?totalReviews > 0, ?neutralReviews * 100.0 / ?totalReviews, 0) AS ?neutralPct)
+
+  # --- Wikidata: company financials ---
+  SERVICE <https://query.wikidata.org/sparql> {
+    ?brandURI rdfs:label ?brandLabel .
+    FILTER(LANG(?brandLabel) = "en")
+    OPTIONAL { ?brandURI wdt:P2139 ?assets . }      # total assets
+    OPTIONAL { ?brandURI wdt:P2295 ?netIncome . }   # net income
+  }
+}
+GROUP BY ?brandLabel ?assets ?netIncome ?goodPct ?badPct ?neutralPct
+ORDER BY ?brandLabel

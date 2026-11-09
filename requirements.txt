@@ -1,0 +1,11 @@
+# Prepare: XML, keyword normalization
+pandas
+pyarrow
+lxml
+nltk
+textblob
+
+# Access: PostgreSQL, Neo4j, RDF
+psycopg2-binary
+neo4j
+rdflib

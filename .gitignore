@@ -1,0 +1,22 @@
+# Raw and derived review data (Yelp Open Dataset is not redistributed)
+*.json
+*.csv
+*.xlsx
+*.pkl
+*.parquet
+*.ttl
+keywords/
+data/*.xml
+!data/sample_reviews.xml
+
+# Python and notebooks
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Local environment and secrets
+.env
+
+# OS
+.DS_Store
+Thumbs.db

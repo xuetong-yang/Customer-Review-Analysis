@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema 
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="http://tt-project.com/reviews"
+  xmlns="http://tt-project.com/reviews"
+  elementFormDefault="qualified">
+
+<!-- declaration of brand Type -->
+  <xs:simpleType name="brandType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="McDonald's"/>
+      <xs:enumeration value="Burger King"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- declaration of RatingType -->
+  <xs:simpleType name="RatingType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="good"/>
+      <xs:enumeration value="bad"/>
+      <xs:enumeration value="neutral"/>
+      <xs:enumeration value="n/a"/> 
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- declaration of DimensionDetailType -->
+  <xs:complexType name="DimensionDetailType">
+    <xs:sequence>
+      <xs:element name="rating" type="RatingType"/>
+      <xs:element name="keyword" type="xs:string" minOccurs="0"  maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:element name="reviews"> 
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="review" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- declaration of 4 aspects -->
+  <xs:element name="annotations">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="service" type="DimensionDetailType"/>
+        <xs:element name="foodQuality" type="DimensionDetailType"/>
+        <xs:element name="environment" type="DimensionDetailType"/>
+        <xs:element name="price" type="DimensionDetailType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="review">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="text" type="xs:string"/>
+        <xs:element ref="annotations"/>
+      </xs:sequence>
+      <xs:attribute name="review_id" type="xs:string" use="required"/>
+      <xs:attribute name="brand" type="brandType" use="required"/>
+    </xs:complexType>
+  </xs:element>
+
+</xs:schema>
